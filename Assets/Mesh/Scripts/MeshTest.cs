@@ -11,7 +11,6 @@ public class MeshTest : MonoBehaviour
     private Vector3[] vertives;
     private Vector2[] uvs;
     private int[] triangles;
-
     private GameObject meshObject;
 
 	void Start ()
@@ -20,15 +19,17 @@ public class MeshTest : MonoBehaviour
         InitTriangles();
         InitVertives();
 
+        //创建mesh
         CreateMesh();
 	}
 
     public void CreateMesh()
     {
-        meshObject = new GameObject();
+        meshObject = new GameObject("mesh");
         meshObject.AddComponent<MeshRenderer>().material = material;
         Mesh mesh = meshObject.AddComponent<MeshFilter>().mesh;
         mesh.name = "mesh";
+
         mesh.Clear();
         mesh.vertices = vertives;
         mesh.uv = uvs;
