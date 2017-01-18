@@ -59,48 +59,32 @@ public class MeshTest : MonoBehaviour
     }
 
     /// <summary>
-    /// UV
-    /// </summary>
-    //public void InitUV()
-    //{
-    //    int sum = Mathf.FloorToInt(( segment.x + 1 ) * ( segment.y + 1 ));
-    //    uvs = new Vector2[sum];
-    //    float u = 1.0f / segment.x;
-    //    float v = 1.0f / segment.y;
-    //    int index = 0;
-    //    for (int i = 0; i < segment.y + 1; i++)
-    //    {
-    //        for (int j = 0; j < segment.x + 1; j++)
-    //        {
-    //            uvs[index] = new Vector2(j * u, i * v);
-    //            index++;
-    //        }
-    //    }
-    //}
-
-    /// <summary>
     /// 索引
     /// </summary>
     public void InitTriangles()
     {
         int sum = Mathf.FloorToInt(pixel.x * pixel.y * 6);
         triangles = new int[sum];
-        uint index = 0;
+        int index = 0;
+
+        int verticesNum = Mathf.FloorToInt(pixel.x) + 1;
+
         for (int i = 0; i < pixel.y; i++)
         {
             for (int j = 0; j < pixel.x; j++)
-            {
-                int role = Mathf.FloorToInt(pixel.x) + 1;
-                int self = j + ( i * role );
-                int next = j + ( ( i + 1 ) * role );
+            {            
+                int self = j + ( i * verticesNum );
+                int next = j + ( ( i + 1 ) * verticesNum );
 
+                //右下角三角形
                 triangles[index] = self;
                 triangles[index + 1] = next + 1;
                 triangles[index + 2] = self + 1;
-
+                //左上角三角形
                 triangles[index + 3] = self;
                 triangles[index + 4] = next;
                 triangles[index + 5] = next + 1;
+
                 index += 6;
             }
         }
