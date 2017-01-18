@@ -8,16 +8,14 @@ public class MeshTest : MonoBehaviour
     public Vector2 segment;
     public float height;
 
-    private Vector3[] vertives;
-    private Vector2[] uvs;
+    private Vector3[] vertices;
     private int[] triangles;
     private GameObject meshObject;
 
 	void Start ()
     {
-        InitUV();
-        InitTriangles();
         InitVertives();
+        InitTriangles();
 
         //创建mesh
         CreateMesh();
@@ -29,10 +27,8 @@ public class MeshTest : MonoBehaviour
         meshObject.AddComponent<MeshRenderer>().material = material;
         Mesh mesh = meshObject.AddComponent<MeshFilter>().mesh;
         mesh.name = "mesh";
-
         mesh.Clear();
-        mesh.vertices = vertives;
-        mesh.uv = uvs;
+        mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();//重置法线
         mesh.RecalculateBounds();//计算网格包围体
@@ -47,13 +43,13 @@ public class MeshTest : MonoBehaviour
         float w = size.x / segment.x;
         float h = size.y / segment.y;
         int index = 0;
-        vertives = new Vector3[sum];
+        vertices = new Vector3[sum];
         for(int i = 0; i < segment.y + 1; i++)
         {
             for(int j = 0; j < segment.x + 1; j++)
             {
-                float tempHeight = GetHeight(heightMap, uvs[index]);
-                vertives[index] = new Vector3(j * w, tempHeight, i * h);
+                float tempHeight = GetHeight(heightMap, new Vector2(j/(segment.x+1), i/(segment.y+1)));
+                vertices[index] = new Vector3(j * w, tempHeight, i * h);
                 index++;
             }
         }
@@ -62,22 +58,22 @@ public class MeshTest : MonoBehaviour
     /// <summary>
     /// UV
     /// </summary>
-    public void InitUV()
-    {
-        int sum = Mathf.FloorToInt(( segment.x + 1 ) * ( segment.y + 1 ));
-        uvs = new Vector2[sum];
-        float u = 1.0f / segment.x;
-        float v = 1.0f / segment.y;
-        int index = 0;
-        for (int i = 0; i < segment.y + 1; i++)
-        {
-            for (int j = 0; j < segment.x + 1; j++)
-            {
-                uvs[index] = new Vector2(j * u, i * v);
-                index++;
-            }
-        }
-    }
+    //public void InitUV()
+    //{
+    //    int sum = Mathf.FloorToInt(( segment.x + 1 ) * ( segment.y + 1 ));
+    //    uvs = new Vector2[sum];
+    //    float u = 1.0f / segment.x;
+    //    float v = 1.0f / segment.y;
+    //    int index = 0;
+    //    for (int i = 0; i < segment.y + 1; i++)
+    //    {
+    //        for (int j = 0; j < segment.x + 1; j++)
+    //        {
+    //            uvs[index] = new Vector2(j * u, i * v);
+    //            index++;
+    //        }
+    //    }
+    //}
 
     /// <summary>
     /// 索引
