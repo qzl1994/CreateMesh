@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class MeshTest : MonoBehaviour
 {
@@ -47,9 +46,9 @@ public class MeshTest : MonoBehaviour
         float h = size.y / segment.y;
         int index = 0;
         vertives = new Vector3[sum];
-        for(int i = 0; i < segment.y; i++)
+        for(int i = 0; i < segment.y + 1; i++)
         {
-            for(int j = 0; j < segment.x; j++)
+            for(int j = 0; j < segment.x + 1; j++)
             {
                 float tempHeight = GetHeight(heightMap, uvs[index]);
                 vertives[index] = new Vector3(j * w, tempHeight, i * h);
@@ -68,9 +67,9 @@ public class MeshTest : MonoBehaviour
         float u = 1.0f / segment.x;
         float v = 1.0f / segment.y;
         int index = 0;
-        for (int i = 0; i < segment.y; i++)
+        for (int i = 0; i < segment.y + 1; i++)
         {
-            for (int j = 0; j < segment.x; j++)
+            for (int j = 0; j < segment.x + 1; j++)
             {
                 uvs[index] = new Vector2(j * u, i * v);
                 index++;
