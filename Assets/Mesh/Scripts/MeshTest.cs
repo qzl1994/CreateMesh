@@ -34,8 +34,8 @@ public class MeshTest : MonoBehaviour
         mesh.vertices = vertives;
         mesh.uv = uvs;
         mesh.triangles = triangles;
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();//重置法线
+        mesh.RecalculateBounds();//计算网格包围体
     }
 
     /// <summary>
