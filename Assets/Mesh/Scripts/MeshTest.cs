@@ -29,6 +29,7 @@ public class MeshTest : MonoBehaviour
         meshObject.AddComponent<MeshRenderer>().material = material;
         Mesh mesh = meshObject.AddComponent<MeshFilter>().mesh;
         mesh.name = "mesh";
+        mesh.Clear();
         mesh.vertices = vertives;
         mesh.uv = uvs;
         mesh.triangles = triangles;
