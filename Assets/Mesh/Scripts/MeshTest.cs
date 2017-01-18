@@ -5,7 +5,7 @@ public class MeshTest : MonoBehaviour
     public Texture2D heightMap;
     public Material material;
     public Vector2 size;
-    public Vector2 segment;
+    public Vector2 pixel;
     public float height;
 
     private Vector3[] vertices;
@@ -14,7 +14,7 @@ public class MeshTest : MonoBehaviour
 
 	void Start ()
     {
-        InitVertives();
+        InitVertices();
         InitTriangles();
 
         //创建mesh
@@ -27,9 +27,12 @@ public class MeshTest : MonoBehaviour
         meshObject.AddComponent<MeshRenderer>().material = material;
         Mesh mesh = meshObject.AddComponent<MeshFilter>().mesh;
         mesh.name = "mesh";
-        mesh.Clear();
+
+        mesh.Clear();//重建前清空数据
+
         mesh.vertices = vertices;
         mesh.triangles = triangles;
+
         mesh.RecalculateNormals();//重置法线
         mesh.RecalculateBounds();//计算网格包围体
     }
@@ -37,18 +40,18 @@ public class MeshTest : MonoBehaviour
     /// <summary>
     /// 顶点
     /// </summary>
-    public void InitVertives()
+    public void InitVertices()
     {
-        int sum = Mathf.FloorToInt(( segment.x + 1 ) * ( segment.y + 1 ));
-        float w = size.x / segment.x;
-        float h = size.y / segment.y;
+        int sum = Mathf.FloorToInt(( pixel.x + 1 ) * ( pixel.y + 1 ));
+        float w = size.x / pixel.x;
+        float h = size.y / pixel.y;
         int index = 0;
         vertices = new Vector3[sum];
-        for(int i = 0; i < segment.y + 1; i++)
+        for(int i = 0; i < pixel.y + 1; i++)
         {
-            for(int j = 0; j < segment.x + 1; j++)
+            for(int j = 0; j < pixel.x + 1; j++)
             {
-                float tempHeight = GetHeight(heightMap, new Vector2(j/(segment.x+1), i/(segment.y+1)));
+                float tempHeight = GetHeight(heightMap, new Vector2(j / pixel.x, i / pixel.y));
                 vertices[index] = new Vector3(j * w, tempHeight, i * h);
                 index++;
             }
@@ -80,19 +83,21 @@ public class MeshTest : MonoBehaviour
     /// </summary>
     public void InitTriangles()
     {
-        int sum = Mathf.FloorToInt(segment.x * segment.y * 6);
+        int sum = Mathf.FloorToInt(pixel.x * pixel.y * 6);
         triangles = new int[sum];
         uint index = 0;
-        for (int i = 0; i < segment.y; i++)
+        for (int i = 0; i < pixel.y; i++)
         {
-            for (int j = 0; j < segment.x; j++)
+            for (int j = 0; j < pixel.x; j++)
             {
-                int role = Mathf.FloorToInt(segment.x) + 1;
+                int role = Mathf.FloorToInt(pixel.x) + 1;
                 int self = j + ( i * role );
                 int next = j + ( ( i + 1 ) * role );
+
                 triangles[index] = self;
                 triangles[index + 1] = next + 1;
                 triangles[index + 2] = self + 1;
+
                 triangles[index + 3] = self;
                 triangles[index + 4] = next;
                 triangles[index + 5] = next + 1;
@@ -105,11 +110,11 @@ public class MeshTest : MonoBehaviour
     /// 获取高度
     /// </summary>
     /// <param name="texture"></param>
-    /// <param name="uv"></param>
+    /// <param name="v"></param>
     /// <returns></returns>
-    public float GetHeight(Texture2D texture,Vector2 uv)
+    public float GetHeight(Texture2D texture,Vector2 v)
     {
-        return GetColor(texture, uv).grayscale * height;
+        return GetColor(texture, v).grayscale * height;
         
     }
 
@@ -117,10 +122,10 @@ public class MeshTest : MonoBehaviour
     /// 获取图片上点的颜色
     /// </summary>
     /// <param name="texture"></param>
-    /// <param name="uv"></param>
+    /// <param name="v"></param>
     /// <returns></returns>
-    public Color GetColor(Texture2D texture,Vector2 uv)
+    public Color GetColor(Texture2D texture,Vector2 v)
     {
-        return texture.GetPixel(Mathf.FloorToInt(texture.width * uv.x), Mathf.FloorToInt(texture.height * uv.y));
+        return texture.GetPixel(Mathf.FloorToInt(texture.width * v.x), Mathf.FloorToInt(texture.height * v.y));
     }
 }
