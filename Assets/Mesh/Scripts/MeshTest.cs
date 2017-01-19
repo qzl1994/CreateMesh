@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(MeshFilter)),RequireComponent(typeof(MeshRenderer))]
 public class MeshTest : MonoBehaviour
 {
     public Texture2D heightMap;
@@ -10,7 +11,6 @@ public class MeshTest : MonoBehaviour
 
     private Vector3[] vertices;
     private int[] triangles;
-    private GameObject meshObject;
 
 	void Start ()
     {
@@ -23,9 +23,8 @@ public class MeshTest : MonoBehaviour
 
     public void CreateMesh()
     {
-        meshObject = new GameObject("mesh");
-        meshObject.AddComponent<MeshRenderer>().material = material;
-        Mesh mesh = meshObject.AddComponent<MeshFilter>().mesh;
+        GetComponent<MeshRenderer>().material = material;
+        Mesh mesh = GetComponent<MeshFilter>().mesh;
         mesh.name = "mesh";
 
         mesh.Clear();//重建前清空数据
